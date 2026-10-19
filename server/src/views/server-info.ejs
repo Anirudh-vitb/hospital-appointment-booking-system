@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CarePoint · Server-rendered demo</title>
+  <%- include('partials/styles') %>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Express + EJS demonstration</p>
+    <h1>CarePoint server information</h1>
+    <p class="note">
+      This page is rendered on the server with EJS. It exists to demonstrate Express templating and
+      URL-encoded form handling for the Full Stack Development – 2 syllabus. Patients use the React application.
+    </p>
+
+    <section>
+      <h2>Runtime</h2>
+      <table>
+        <tbody>
+          <tr><th>Hospital</th><td><%= hospital.name %></td></tr>
+          <tr><th>Node.js</th><td><%= server.node %></td></tr>
+          <tr><th>Mongoose</th><td><%= server.mongoose %></td></tr>
+          <tr><th>Environment</th><td><%= server.environment %></td></tr>
+          <tr><th>Hospital timezone</th><td><%= server.timezone %></td></tr>
+          <tr><th>Database</th><td><span class="pill <%= server.database === 'connected' ? 'ok' : 'warn' %>"><%= server.database %></span></td></tr>
+          <tr><th>Uptime</th><td><%= server.uptimeMinutes %> min</td></tr>
+          <tr><th>Active doctors / departments</th><td><%= doctors.length %> / <%= departmentCount %></td></tr>
+          <tr><th>Rendered at</th><td><%= server.renderedAt %></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Check a doctor's free slots</h2>
+      <p class="note">Submits a plain HTML form (<code>application/x-www-form-urlencoded</code>) to <code>POST /demo/availability</code>.</p>
+      <form method="post" action="/demo/availability">
+        <label>Doctor
+          <select name="doctorId" required>
+            <option value="">Select a doctor</option>
+            <% doctors.forEach(function (doc) { %>
+              <option value="<%= doc._id %>" <%= String(doc._id) === form.doctorId ? 'selected' : '' %>><%= doc.displayName %> — <%= doc.specialty %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Date
+          <input type="date" name="date" min="<%= today %>" value="<%= form.date %>" required>
+        </label>
+        <button type="submit">Check availability</button>
+      </form>
+
+      <% if (error) { %>
+        <p class="error" role="alert"><%= error %></p>
+      <% } %>
+
+      <% if (result) { %>
+        <h3><%= result.doctor %> · <%= result.date %></h3>
+        <% if (!result.isWorkingDay) { %>
+          <p>No outpatient hours on this day.</p>
+        <% } else if (result.blockedAllDay) { %>
+          <p>The doctor is unavailable all day<%= result.blockReason ? ' (' + result.blockReason + ')' : '' %>.</p>
+        <% } else { %>
+          <ul class="slots">
+            <% result.slots.forEach(function (slot) { %>
+              <li class="<%= slot.status %>"><%= slot.start %> <small><%= slot.status %></small></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      <% } %>
+    </section>
+    <p><a href="/api/health">JSON health check</a></p>
+  </main>
+</body>
+</html>
