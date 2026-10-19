@@ -15,7 +15,7 @@
     "create-admin": "node scripts/createAdmin.js",
     "test": "vitest run",
     "lint": "eslint .",
-    "vercel-build": "node scripts/seedOnBuild.js"
+    "vercel-build": "node scripts/seedOnBuild.js && mkdir -p public"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

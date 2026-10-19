@@ -151,3 +151,6 @@ vite.config.ts.timestamp-*
 # Playwright output
 client/test-results/
 client/playwright-report/
+
+# Empty static output folder created by `npm run vercel-build`
+public/
