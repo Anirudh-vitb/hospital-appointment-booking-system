@@ -15,7 +15,7 @@
     "create-admin": "node scripts/createAdmin.js",
     "test": "vitest run",
     "lint": "eslint .",
-    "vercel-build": "node scripts/seedOnBuild.js && mkdir -p public"
+    "vercel-build": "node scripts/seedOnBuild.js && mkdir -p public && printf 'User-agent: *\\nDisallow: /\\n' > public/robots.txt"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
