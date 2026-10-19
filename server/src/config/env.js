@@ -23,9 +23,12 @@ const env = {
   isProduction,
   isTest,
   port: Number(process.env.PORT) || 5000,
+  // Not enforced at startup: without it the API still boots, the health check
+  // reports "not configured" and data routes answer 503, which is easier to
+  // diagnose on a hosting dashboard than a crashing process.
   mongoUri: isTest
     ? process.env.MONGODB_URI_TEST || 'mongodb://127.0.0.1:27017/carepoint_test'
-    : required('MONGODB_URI', isProduction ? undefined : 'mongodb://127.0.0.1:27017/carepoint'),
+    : process.env.MONGODB_URI || (isProduction ? '' : 'mongodb://127.0.0.1:27017/carepoint'),
   // A weak fallback is acceptable only on a developer machine.
   sessionSecret: required('SESSION_SECRET', isProduction ? undefined : 'dev-only-session-secret-change-me'),
   // Comma-separated list so a Vercel preview URL can be allowed alongside production.
