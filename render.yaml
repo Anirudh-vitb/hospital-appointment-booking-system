@@ -1,0 +1,25 @@
+# Alternative backend hosting on Render (free web service).
+# Dashboard → New → Blueprint → select this repository.
+# After it deploys, put the Render URL into client/vercel.json rewrites.
+services:
+  - type: web
+    name: carepoint-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: HOSPITAL_TIMEZONE
+        value: Asia/Kolkata
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
