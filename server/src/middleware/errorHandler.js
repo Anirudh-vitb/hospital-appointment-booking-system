@@ -8,7 +8,6 @@ export function notFound(req, res, next) {
 
 // Centralised error handler: converts every error into the same JSON shape
 // and never leaks stack traces or database internals to the client.
-// eslint-disable-next-line no-unused-vars
 export function errorHandler(error, req, res, next) {
   let apiError = error;
 

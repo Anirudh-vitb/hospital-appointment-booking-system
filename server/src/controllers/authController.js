@@ -59,7 +59,7 @@ export async function logout(req, res) {
     await audit(req, { action: 'user.logout', entityType: 'User', entityId: req.user._id, summary: `${req.user.role} signed out` });
   }
   await destroySession(req);
-  const { maxAge, ...clearOptions } = cookieOptions; // eslint-disable-line no-unused-vars
+  const { maxAge, ...clearOptions } = cookieOptions;
   res.clearCookie(SESSION_COOKIE, clearOptions);
   ok(res, { signedOut: true });
 }
