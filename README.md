@@ -7,7 +7,7 @@ Individual mini-project · **Full Stack Development – 2 (R-23)** · III B.Tech
 | | |
 |---|---|
 | GitHub repository | https://github.com/anirudh-vitb/hospital-appointment-booking-system |
-| Live application | **Not deployed yet** — see [Deployment](#24-deployment) and `PROJECT_STATUS.md`. Expected URL once deployed: `https://carepoint-hospital.vercel.app` |
+| Live application | **https://carepoint-vitb.vercel.app** (API: https://carepoint-hospital-api.vercel.app/api/health) |
 
 > **Academic demonstration.** All doctors, patients, fees and contact details are fictional. The application has not been assessed for real health records and must not be used for real medical appointments.
 
@@ -345,20 +345,20 @@ The recommended free setup is **two Vercel projects + MongoDB Atlas**. (Render i
 **B. Let Vercel read the repository** — Vercel → Account Settings → **Authentication / Git** → connect the GitHub account that owns `anirudh-vitb/hospital-appointment-booking-system`, and make sure the **Vercel GitHub App** is installed for that repository (GitHub → Settings → Applications → Vercel → Repository access).
 
 **C. Backend project** — Vercel → Add New → Project → import the repository →
-* Project name: `carepoint-hospital-api` · Root Directory: `server` · Framework preset: **Other** · Build command: empty
-* Environment variables: `NODE_ENV=production`, `MONGODB_URI=<Atlas string>`, `SESSION_SECRET=<random>`, `FRONTEND_URL=https://carepoint-hospital.vercel.app`, `HOSPITAL_TIMEZONE=Asia/Kolkata`
+* Project name: `carepoint-hospital-api` · Root Directory: `server` · Framework preset: **Other** · Build command: `npm run vercel-build` (seeds the database when `SEED_ON_BUILD=true`, and writes the small static `public/` folder Vercel requires)
+* Environment variables: `NODE_ENV=production`, `MONGODB_URI=<Atlas string>`, `SESSION_SECRET=<random>`, `FRONTEND_URL=https://carepoint-vitb.vercel.app`, `HOSPITAL_TIMEZONE=Asia/Kolkata`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SEED_ON_BUILD=true`
 * Deploy, then open `https://carepoint-hospital-api.vercel.app/api/health` → `"database":"connected"`.
 
-**D. Seed Atlas once** from your computer: `cd server && MONGODB_URI='<Atlas string>' ADMIN_EMAIL=… ADMIN_PASSWORD=… npm run seed`.
+**D. Seed Atlas** — either let the build do it (`SEED_ON_BUILD=true`, then redeploy), or from your computer: `cd server && MONGODB_URI='<Atlas string>' ADMIN_EMAIL=… ADMIN_PASSWORD=… npm run seed`.
 
 **E. Frontend project** — import the same repository again →
-* Project name: `carepoint-hospital` · Root Directory: `client` · Framework preset: **Vite** (build `npm run build`, output `dist`)
+* Project name: `carepoint-vitb` · Root Directory: `client` · Framework preset: **Vite** (build `npm run build`, output `dist`)
 * If Vercel gave the backend a different domain than `carepoint-hospital-api.vercel.app`, edit the two URLs in `client/vercel.json`, commit and push.
-* If the frontend domain differs from `carepoint-hospital.vercel.app`, update `FRONTEND_URL` on the backend and redeploy it.
+* If the frontend domain differs from `carepoint-vitb.vercel.app`, update `FRONTEND_URL` on the backend and redeploy it.
 
 **F. Disable Vercel Authentication** for production on both projects if it is on (Settings → Deployment Protection), so evaluators can open the site.
 
-**G. Verify** (checklist in `PROJECT_STATUS.md`): home page loads doctors, register, sign in/out, search, book, refresh, cancel, try booking a taken slot, patient blocked from `/admin`, `/demo/server-info` renders.
+**G. Verify** — `cd server && BASE_URL=https://carepoint-vitb.vercel.app ADMIN_EMAIL=… ADMIN_PASSWORD=… npm run smoke` runs the main journey over HTTP; then check the UI by hand (checklist in `PROJECT_STATUS.md`): home page loads doctors, register, sign in/out, search, book, refresh, cancel, try booking a taken slot, patient blocked from `/admin`, `/demo/server-info` renders.
 
 ## 27. Known limitations
 
