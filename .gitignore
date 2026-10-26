@@ -151,3 +151,6 @@ vite.config.ts.timestamp-*
 # Playwright output
 client/test-results/
 client/playwright-report/
+
+# Static output folder (robots.txt) created by `npm run vercel-build`
+/server/public/

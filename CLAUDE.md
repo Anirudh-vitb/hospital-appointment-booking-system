@@ -21,4 +21,4 @@ CarePoint: hospital appointment booking (React 19 + Vite / Express 5 + Mongoose 
 - `client`: `npm run dev`, `npm test`, `npm run lint`, `npm run build`, `npm run test:e2e` (in this sandbox: `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`).
 
 ## Progress
-See `PROJECT_STATUS.md`. All features implemented and tested locally; deployment pending owner actions (Atlas cluster, Vercel GitHub access).
+See `PROJECT_STATUS.md`. Live on Vercel (frontend `carepoint-vitb`, API `carepoint-hospital-api`), deployed via the Vercel API from the public repo because Vercel cannot link it. `npm run smoke` (server) checks a deployment over HTTP.

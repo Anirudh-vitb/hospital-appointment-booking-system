@@ -1,6 +1,6 @@
 # Project status — CarePoint
 
-_Last updated: 19 October 2026 · Submission deadline: 26 October 2026_
+_Last updated: 26 October 2026 · Submission deadline: 26 October 2026_
 
 ## Phase summary
 
@@ -12,7 +12,7 @@ _Last updated: 19 October 2026 · Submission deadline: 26 October 2026_
 | D. Role dashboards (doctor, administrator) | ✅ Done |
 | E. UI polish, EJS demo, syllabus coverage | ✅ Done (desktop + mobile screenshots reviewed) |
 | F. Verification (tests, build) | ✅ Done — results below |
-| G. GitHub and deployment | ⚠️ Code pushed to branch `claude/great-ride-vk3k6u` (PR open). **Live deployment blocked on owner actions** — see below |
+| G. GitHub and deployment | ✅ Code on GitHub; frontend, API and database live and verified — see below |
 | H. Handover docs | ✅ README, docs/API.md, docs/DESIGN.md, PROJECT_WALKTHROUGH.md, VIVA_PREPARATION.md |
 
 ## Tests actually run (19 Oct 2026, local, MongoDB 7 replica set in Docker, Node 22)
@@ -27,13 +27,21 @@ _Last updated: 19 October 2026 · Submission deadline: 26 October 2026_
 | Production mode without DB | `NODE_ENV=production node src/server.js` | health reports `not configured`, data routes return 503 (no crash) |
 | Secret scan | grep of `client/dist` and tracked files | no connection strings or secrets |
 
-## Deployment — what is blocking a live URL
+## Deployment status (26 Oct 2026) — LIVE
 
-1. **MongoDB Atlas** cluster does not exist yet (no access from this environment). Owner must create it (README §20).
-2. **Vercel cannot link the GitHub repository**: the Vercel account (`anirudhleetcode-max`) returned `repo_no_access` for `anirudh-vitb/hospital-appointment-booking-system`. Owner must connect that GitHub account / install the Vercel GitHub App on the repo (README §26 B).
-3. Render's connector was unavailable in this session; `render.yaml` is provided as an alternative for the API.
+| Part | URL | State |
+|---|---|---|
+| Frontend (Vercel project `carepoint-vitb`) | https://carepoint-vitb.vercel.app | ✅ Live |
+| API (Vercel project `carepoint-hospital-api`) | https://carepoint-hospital-api.vercel.app/api/health | ✅ Live, connected to Atlas |
+| Database (Atlas `carepoint-cluster`) | – | ✅ Seeded during the API build (`SEED_ON_BUILD=true`): 8 departments, 12 doctors, sample patients and appointments, administrator |
 
-Once 1 and 2 are done, follow README §26 C–G. Expected URLs: frontend `https://carepoint-hospital.vercel.app`, API `https://carepoint-hospital-api.vercel.app`.
+### Live smoke test (`npm run smoke`, run from a Vercel sandbox, 26 Oct 2026)
+
+SPA deep link · doctor directory (12 doctors) · search "cardio" · no emails in public data · register patient · HttpOnly + Secure session cookie · book appointment · booking in patient list · double booking refused (409) · other patient gets 404 · doctor login and confirm · patient sees "confirmed" · patient cancels · slot free again · patient blocked from admin API (403) · state change without session/CSRF rejected · admin login and statistics · audit log entry · logout · old session rejected (401) · EJS demo page renders — **all passed**. The first run flagged `/api/health` reporting "disconnected" on a cold instance; fixed in `cc78b2a` (health now connects first).
+
+Notes:
+- Vercel cannot link the GitHub repository (`repo_no_access`), so deployments are created from the public repository via the Vercel API, not on every push. Installing the Vercel GitHub App on the repository would enable automatic deploys.
+- `carepoint-hospital.vercel.app` belongs to an unrelated project, hence the `carepoint-vitb` name.
 
 ## Live verification checklist (tick after deploying)
 
@@ -57,4 +65,4 @@ See README §27. No known failing tests.
 
 ## Exact next action
 
-Owner: create the Atlas cluster and fix Vercel ↔ GitHub access, then deploy following README §26 (or share the Atlas connection string privately in a new session so the deployment can be completed and verified).
+Merge PR #2, then submit the Google Form with the GitHub and live links. Optional: install the Vercel GitHub App on the repository for automatic deploys; rotate the database and admin passwords after evaluation.
